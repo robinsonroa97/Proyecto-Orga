@@ -1,0 +1,77 @@
+.data
+	
+		opcion1: .asciz "Comprimir imagen PBM\n"
+		opcion2: .asciz "Descomprimir imagen RLE\n"
+		opcion3: .asciz "Salir\n"
+		errora: .asciz "Opcion no valida\n"
+		menu: .asciz "Elija (1) para comprimir.\nElija (2) para descomprimir.\nElija (3) para salir.\n"
+		
+		formd:   .asciz "%d"
+		
+.bss		
+		.comm  op,4,4
+
+.text
+
+
+
+.global main
+
+main:
+
+
+	leal menu, %eax                  #Imprime mensaje dcon opciones
+    pushl %eax
+    call printf
+    addl $4, %esp
+    
+    leal op, %eax                         #Lee el numero a
+    pushl %eax
+    leal formd, %eax
+    pushl %eax
+    call scanf
+    addl $8, %esp
+    
+    cmpl $4, op
+    jge error
+    
+    cmpl $1, op
+    je comprimir
+    
+    cmpl $2, op
+    je descomprimir
+    
+    cmpl $3, op
+    je fin
+    
+comprimir:
+	
+	leal opcion1, %eax                  #Imprime mensaje de opcion
+    pushl %eax
+    call printf
+    addl $4, %esp
+    jmp main
+    
+descomprimir: 
+   
+	leal opcion2, %eax                  #Imprime mensaje de opcion
+    pushl %eax
+    call printf
+    addl $4, %esp
+    jmp main
+    
+error: 
+
+
+	leal errora, %eax                  #Imprime mensaje de error
+    pushl %eax
+    call printf
+    addl $4, %esp
+    jmp main
+
+
+
+fin:
+	movl $1, %eax
+	movl $0, %ebx 	
+	int $0x80
